@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useRoutes } from "./routes";
+import { Navbar } from "./components/app/Navbar";
+import { checkLogin } from "./redux/auth/authActions";
 
 function App() {
+  const { username, token } = useSelector((state) => state.auth);
+  const routes = useRoutes(username, token);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkLogin());
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      {routes}
+    </Router>
   );
 }
 
